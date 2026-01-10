@@ -41,6 +41,12 @@ class Appearance(db.Model, SerializerMixin):
     episode= db.relationship('Episode', back_populates= 'appearances')
     guest= db.relationship('Guest', back_populates = 'appearances')
 
+    @validates('rating')
+    def validate_rating(self, key, value):
+        if value not in range (1,6):
+            raise ValueError("Rating must be between 1 and 5")
+        return value
+
     def __repr__(self):
         return f'<Appearance {self.id} : {self.rating}>'
 
