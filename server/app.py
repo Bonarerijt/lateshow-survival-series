@@ -38,7 +38,8 @@ def get_episode_id(id):
 
 @app.route('/guests')
 def get_guests():
-    pass
+    guests = [guest.to_dict() for guest in Guest.query.all()]
+    return make_response(guests, 200)
 
 
 @app.route('/appearances', methods=['POST'])
