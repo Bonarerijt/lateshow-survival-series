@@ -20,6 +20,8 @@ class Episode(db.Model, SerializerMixin):
     date = db.Column(db.String)
     number = db.Column(db.Integer)
 
+    appearances = db.relationship('Appearance', back_populates= 'episode', cascade='all, delete-orphan')
+
 
 class Appearance(db.Model, SerializerMixin):
     __tablename__ = 'appearances'
@@ -30,6 +32,9 @@ class Appearance(db.Model, SerializerMixin):
     episode_id = db.Column(db.Integer, db.ForeignKey('episodes.id'))
     guest_id = db.Column(db.Integer, db.ForeignKey('guests.id'))
 
+    episode= db.relationship('Episode', back_populates= 'appearances')
+    guest= db.relationship('Guest', back_populates = 'appearances')
+
 
 
 class Guest(db.Model, SerializerMixin):
@@ -38,3 +43,5 @@ class Guest(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String)
     occupation = db.Column(db.String)
+
+    appearances = db.relationship('Appearance', back_populates= 'guest', cascade='all, delete-orphan')
