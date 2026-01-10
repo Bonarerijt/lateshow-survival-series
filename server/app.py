@@ -21,10 +21,12 @@ def index():
 
 @app.route('/episodes')
 def get_episodes():
-    pass
+    episodes = [episode.to_dict() for episode in Episode.query.all()]
+    return make_response(episodes, 200)
+
 
 @app.route('/episodes/<int:id>')
-def get_episodes_id(id):
+def get_episode_id(id):
     pass
 
 
