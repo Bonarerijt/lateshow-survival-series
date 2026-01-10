@@ -13,12 +13,28 @@ db = SQLAlchemy(metadata=metadata)
 
 
 class Episode(db.Model, SerializerMixin):
-    pass
+    __tablename__ = 'episodes'
+
+    
+    id = db.Column(db.Integer, primary_key = True)
+    date = db.Column(db.String)
+    number = db.Column(db.Integer)
 
 
 class Appearance(db.Model, SerializerMixin):
-    pass
+    __tablename__ = 'appearances'
+
+
+    id = db.Column(db.Integer, primary_key = True)
+    rating = db.Column(db.Integer)
+    episode_id = db.Column(db.Integer, db.ForeignKey('episodes.id'))
+    guest_id = db.Column(db.Integer, db.ForeignKey('guests.id'))
+
 
 
 class Guest(db.Model, SerializerMixin):
-    pass
+    __tablename__ = 'guests'
+
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String)
+    occupation = db.Column(db.String)
