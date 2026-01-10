@@ -19,5 +19,25 @@ def index():
     return '<h1>Welcome to lateshow survival series!</h1>'
 
 
+@app.route('/episodes')
+def get_episodes():
+    pass
+
+@app.route('/episodes/<int:id>')
+def get_episodes_id(id):
+    pass
+
+
+@app.route('/guests')
+def get_guests():
+    pass
+
+
+@app.route('/appearances', methods=['POST'])
+def create_appearance():
+    pass
+
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
