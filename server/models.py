@@ -21,6 +21,7 @@ class Episode(db.Model, SerializerMixin):
     number = db.Column(db.Integer)
 
     appearances = db.relationship('Appearance', back_populates= 'episode', cascade='all, delete-orphan')
+    guests = association_proxy('appearances', 'guest')
 
 
 class Appearance(db.Model, SerializerMixin):
@@ -45,3 +46,4 @@ class Guest(db.Model, SerializerMixin):
     occupation = db.Column(db.String)
 
     appearances = db.relationship('Appearance', back_populates= 'guest', cascade='all, delete-orphan')
+    episodes = db.relationship('appearances', 'episode')
