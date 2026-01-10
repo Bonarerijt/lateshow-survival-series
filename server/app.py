@@ -27,7 +27,13 @@ def get_episodes():
 
 @app.route('/episodes/<int:id>')
 def get_episode_id(id):
-    pass
+    episode = Episode.query.filter_by(id=id).first()
+
+    if not episode:
+        return make_response({"error": "Episode not found"}, 404)
+    
+    episode_dict = episode.to_dict()
+    return make_response(episode_dict, 200)
 
 
 @app.route('/guests')
