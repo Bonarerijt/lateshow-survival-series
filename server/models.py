@@ -14,6 +14,7 @@ db = SQLAlchemy(metadata=metadata)
 
 class Episode(db.Model, SerializerMixin):
     __tablename__ = 'episodes'
+    serialize_rules = ('-appearances.episode',)
 
     
     id = db.Column(db.Integer, primary_key = True)
@@ -23,9 +24,13 @@ class Episode(db.Model, SerializerMixin):
     appearances = db.relationship('Appearance', back_populates= 'episode', cascade='all, delete-orphan')
     guests = association_proxy('appearances', 'guest')
 
+    def __repr__(self):
+        return f'<Episode {self.id}: {self.date}; {self.number}>'
+
 
 class Appearance(db.Model, SerializerMixin):
     __tablename__ = 'appearances'
+    serialize_rules = ('-episode.appearances', '-guest.appearances',)
 
 
     id = db.Column(db.Integer, primary_key = True)
@@ -36,10 +41,14 @@ class Appearance(db.Model, SerializerMixin):
     episode= db.relationship('Episode', back_populates= 'appearances')
     guest= db.relationship('Guest', back_populates = 'appearances')
 
+    def __repr__(self):
+        return f'<Appearance {self.id} : {self.rating}>'
+
 
 
 class Guest(db.Model, SerializerMixin):
     __tablename__ = 'guests'
+    serialize_rules = ('-appearances.guest',)
 
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String)
@@ -47,3 +56,6 @@ class Guest(db.Model, SerializerMixin):
 
     appearances = db.relationship('Appearance', back_populates= 'guest', cascade='all, delete-orphan')
     episodes = db.relationship('appearances', 'episode')
+
+    def __repr__(self):
+        return f'<Guest ({self.id}) {self.name}; {self.occupation}>'
