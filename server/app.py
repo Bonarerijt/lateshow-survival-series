@@ -44,7 +44,17 @@ def get_guests():
 
 @app.route('/appearances', methods=['POST'])
 def create_appearance():
-    pass
+    new_appearance = Appearance(
+        rating= request.form.get('rating'),
+        guest_id= request.form.get('guest_id'),
+        episode_id= request.form.get('episode_id'),
+    )
+
+    db.session.add(new_appearance)
+    db.session.commit()
+
+    new_appearance_dict= new_appearance.to_dict
+    return make_response(new_appearance_dict, 201)
 
 
 
