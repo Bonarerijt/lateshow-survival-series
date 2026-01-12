@@ -62,6 +62,7 @@ class Guest(db.Model, SerializerMixin):
 
     appearances = db.relationship('Appearance', back_populates= 'guest', cascade='all, delete-orphan')
     episodes = db.relationship('appearances', 'episode')
+    episodes = association_proxy('appearances', 'episode')
 
     def __repr__(self):
         return f'<Guest ({self.id}) {self.name}; {self.occupation}>'

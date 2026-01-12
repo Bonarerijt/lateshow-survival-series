@@ -32,7 +32,7 @@ def get_episode_id(id):
     if not episode:
         return make_response({"error": "Episode not found"}, 404)
     
-    episode_dict = episode.to_dict()
+    episode_dict = episode.to_dict(rules= ('-appearances.episode', '-appearances.guest.appearances',))
     return make_response(episode_dict, 200)
 
 
@@ -44,18 +44,20 @@ def get_guests():
 
 @app.route('/appearances', methods=['POST'])
 def create_appearance():
-    new_appearance = Appearance(
-        rating= request.form.get('rating'),
-        guest_id= request.form.get('guest_id'),
-        episode_id= request.form.get('episode_id'),
-    )
-
-    db.session.add(new_appearance)
-    db.session.commit()
-
-    new_appearance_dict= new_appearance.to_dict
-    return make_response(new_appearance_dict, 201)
-
+    data = request.get_json()
+    try:
+        new_appearance = Appearance(
+            rating= data['rating'],
+            guest_id= data['guest_id'],
+            episode_id= ['episode_id'])
+        db.session.add(new_appearance)
+        db.session.commit()
+        new_appearance_dict= new_appearance.to_dict()
+        return make_response(new_appearance_dict, 201)
+    
+    except Exception as e:
+        db.session.rollback()
+        return make_response({"errors": ["validation errors"]}, 422)
 
 
 if __name__ == '__main__':
